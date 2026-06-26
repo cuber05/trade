@@ -59,10 +59,10 @@ async def coin_ohlc(
 async def coin_ai_analysis(coin_id: str = Path(min_length=1)):
     """
     Get AI-generated analysis for a coin.
-    Uses OpenAI if configured, otherwise falls back to built-in engine.
-    Returns score (0-100), sentiment, reasons, risks, and 'Explain Why' narrative.
+    Uses Groq if configured, otherwise falls back to built-in engine.
+    Feeds sector peers + trending context for comparative analysis.
     """
-    # Fetch all data
+    # Fetch all data concurrently
     coin_data = await coingecko.get_coin_detail(coin_id)
     if not coin_data:
         return {"error": f"Failed to fetch data for '{coin_id}'"}
@@ -70,18 +70,38 @@ async def coin_ai_analysis(coin_id: str = Path(min_length=1)):
     global_data = await coingecko.get_global_data()
     fg_data = await fear_greed.get_fear_greed_index(limit=1)
 
-    # Try Reddit sentiment (non-blocking, may return empty)
+    # Reddit sentiment (non-blocking, may return empty)
     coin_name = coin_data.get("name", coin_id)
     coin_symbol = coin_data.get("symbol", "")
     reddit_sentiment = await reddit.get_coin_sentiment(coin_name, coin_symbol)
 
-    # Try OpenAI first
-    openai_analysis = await generate_ai_analysis(
-        coin_data, global_data, fg_data, reddit_sentiment
+    # Fetch sector peers: grab coins from the same category for comparison
+    sector_peers = None
+    categories = coin_data.get("categories", [])
+    if categories:
+        # Pick the most specific category (skip generic ones)
+        skip = {"Cryptocurrency", "Coins", "Token"}
+        category_slug = None
+        for cat in categories:
+            if cat and cat not in skip:
+                category_slug = cat.lower().replace(" ", "-").replace("'", "")
+                break
+        if category_slug:
+            sector_peers = await coingecko.get_coins_markets(
+                per_page=10, sparkline=False, category=category_slug
+            )
+
+    # Fetch trending coins for additional context
+    trending_data = await coingecko.get_trending()
+
+    # Try Groq first
+    groq_analysis = await generate_ai_analysis(
+        coin_data, global_data, fg_data, reddit_sentiment,
+        sector_peers=sector_peers, trending_data=trending_data
     )
 
-    if openai_analysis:
-        analysis = openai_analysis
+    if groq_analysis:
+        analysis = groq_analysis
     else:
         # Fall back to built-in engine
         analysis = analyze_coin(coin_data, global_data, fg_data)

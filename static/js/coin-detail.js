@@ -240,32 +240,92 @@ const CoinDetail = {
     }
 
     const score = data.score || 50;
+    const confidence = data.confidence || 50;
     const circumference = 2 * Math.PI * 50;
-    const offset = circumference - (score / 100) * circumference;
-    const color = data.sentiment_color || Utils.fgColor(score);
+    const scoreOffset = circumference - (score / 100) * circumference;
+    const confOffset = circumference - (confidence / 100) * circumference;
+    const scoreColor = Utils.fgColor(score);
+    const confColor = confidence >= 70 ? 'var(--neon-blue)' : confidence >= 40 ? 'var(--warning)' : 'var(--loss)';
+
+    // Verdict styling
+    const verdictMap = {
+      'Strong Momentum': { color: 'var(--gain)', icon: 'fa-rocket' },
+      'Consider': { color: 'var(--neon-blue)', icon: 'fa-thumbs-up' },
+      'Watch': { color: 'var(--warning)', icon: 'fa-eye' },
+      'Avoid': { color: 'var(--loss)', icon: 'fa-ban' },
+    };
+    const verdict = data.verdict || 'Watch';
+    const vStyle = verdictMap[verdict] || verdictMap['Watch'];
 
     body.innerHTML = `
+      <!-- Score + Confidence Rings -->
       <div class="ai-score-container">
-        <div class="ai-score-ring">
-          <svg viewBox="0 0 120 120">
-            <circle class="ring-bg" cx="60" cy="60" r="50" />
-            <circle class="ring-fill" cx="60" cy="60" r="50"
-              stroke="${color}"
-              stroke-dasharray="${circumference}"
-              stroke-dashoffset="${offset}" />
-          </svg>
-          <div class="ai-score-value">
-            <span class="ai-score-number" style="color:${color}">${score}</span>
-            <span class="ai-score-max">/100</span>
+        <div style="text-align:center;">
+          <div class="ai-score-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="50" />
+              <circle class="ring-fill" cx="60" cy="60" r="50"
+                stroke="${scoreColor}"
+                stroke-dasharray="${circumference}"
+                stroke-dashoffset="${scoreOffset}" />
+            </svg>
+            <div class="ai-score-value">
+              <span class="ai-score-number" style="color:${scoreColor}">${score}</span>
+              <span class="ai-score-max">/100</span>
+            </div>
           </div>
+          <div style="font-size:var(--fs-xs);color:var(--text-secondary);margin-top:4px;">SCORE</div>
         </div>
-        <div>
-          <div class="ai-sentiment-label" style="color:${color}">${data.sentiment || 'Neutral'}</div>
-          <div class="ai-risk-label">Risk: ${data.risk_level || 'Medium'}</div>
-          ${data.source === 'openai' ? '<div style="margin-top:4px;"><span class="tag tag-accent"><i class="fas fa-bolt"></i> GPT-4o Analysis</span></div>' : ''}
+        <div style="text-align:center;">
+          <div class="ai-score-ring" style="width:90px;height:90px;">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="50" />
+              <circle class="ring-fill" cx="60" cy="60" r="50"
+                stroke="${confColor}"
+                stroke-dasharray="${circumference}"
+                stroke-dashoffset="${confOffset}" />
+            </svg>
+            <div class="ai-score-value">
+              <span class="ai-score-number" style="color:${confColor};font-size:var(--fs-xl);">${confidence}</span>
+              <span class="ai-score-max">/100</span>
+            </div>
+          </div>
+          <div style="font-size:var(--fs-xs);color:var(--text-secondary);margin-top:4px;">CONFIDENCE</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--sp-2);">
+          <div class="ai-sentiment-label" style="color:${scoreColor}">${data.sentiment || data.market_sentiment || 'Neutral'}</div>
+          <div class="ai-risk-label">Risk: ${data.risk_level || data.risk || 'Medium'}</div>
+          <div style="font-size:var(--fs-xs);color:var(--text-secondary);">Style: ${data.investment_style || 'N/A'}</div>
+          <div style="display:inline-flex;align-items:center;gap:4px;margin-top:4px;padding:4px 10px;border-radius:100px;background:${vStyle.color}20;color:${vStyle.color};font-size:var(--fs-xs);font-weight:600;">
+            <i class="fas ${vStyle.icon}"></i> ${verdict}
+          </div>
+          ${data.source === 'groq' ? '<div style="margin-top:4px;"><span class="tag tag-accent"><i class="fas fa-bolt"></i> Groq Llama 3</span></div>' : ''}
         </div>
       </div>
 
+      <!-- Summary -->
+      ${data.summary ? `
+        <div style="padding:var(--sp-4);background:var(--bg-tertiary);border-radius:var(--border-radius);margin-bottom:var(--sp-4);border-left:3px solid ${scoreColor};">
+          <div style="font-size:var(--fs-xs);color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:var(--sp-2);">Summary</div>
+          <p style="font-size:var(--fs-sm);line-height:1.6;color:var(--text-primary);">${data.summary}</p>
+        </div>
+      ` : ''}
+
+      <!-- Market Context -->
+      ${data.market_context ? `
+        <div style="padding:var(--sp-3) var(--sp-4);background:var(--bg-elevated);border-radius:var(--border-radius);margin-bottom:var(--sp-4);font-size:var(--fs-sm);color:var(--text-secondary);display:flex;align-items:center;gap:var(--sp-2);">
+          <i class="fas fa-globe" style="color:var(--neon-blue);"></i> ${data.market_context}
+        </div>
+      ` : ''}
+
+      <!-- Sector Comparison -->
+      ${data.sector_comparison ? `
+        <div style="padding:var(--sp-3) var(--sp-4);background:var(--bg-elevated);border-radius:var(--border-radius);margin-bottom:var(--sp-4);font-size:var(--fs-sm);color:var(--text-secondary);display:flex;align-items:center;gap:var(--sp-2);border-left:3px solid var(--neon-purple);">
+          <i class="fas fa-layer-group" style="color:var(--neon-purple);"></i> ${data.sector_comparison}
+        </div>
+      ` : ''}
+
+      <!-- Bullish / Bearish Factors -->
       <div class="ai-factors">
         <div class="ai-factors-list">
           <h4 class="text-gain"><i class="fas fa-arrow-up"></i> Bullish Factors</h4>
@@ -281,6 +341,17 @@ const CoinDetail = {
         </div>
       </div>
 
+      <!-- Opportunities -->
+      ${(data.opportunities || []).length > 0 ? `
+        <div style="margin-bottom: var(--sp-4);">
+          <h4 style="font-size: var(--fs-sm); color: var(--neon-cyan); margin-bottom: var(--sp-2);">
+            <i class="fas fa-lightbulb"></i> Opportunities
+          </h4>
+          ${data.opportunities.map(o => `<div class="ai-factor-item"><i class="fas fa-arrow-right" style="color:var(--neon-cyan)"></i> ${o}</div>`).join('')}
+        </div>
+      ` : ''}
+
+      <!-- Risks -->
       ${(data.risks || []).length > 0 ? `
         <div style="margin-bottom: var(--sp-4);">
           <h4 style="font-size: var(--fs-sm); color: var(--warning); margin-bottom: var(--sp-2);">
@@ -290,6 +361,17 @@ const CoinDetail = {
         </div>
       ` : ''}
 
+      <!-- What to Watch Next -->
+      ${(data.what_to_watch_next || []).length > 0 ? `
+        <div style="margin-bottom: var(--sp-4);">
+          <h4 style="font-size: var(--fs-sm); color: var(--neon-purple); margin-bottom: var(--sp-2);">
+            <i class="fas fa-binoculars"></i> What to Watch Next
+          </h4>
+          ${data.what_to_watch_next.map(w => `<div class="ai-factor-item"><i class="fas fa-eye" style="color:var(--neon-purple)"></i> ${w}</div>`).join('')}
+        </div>
+      ` : ''}
+
+      <!-- Reddit Sentiment -->
       ${data.reddit_sentiment && data.reddit_sentiment.available ? `
         <div style="margin-bottom: var(--sp-4); padding: var(--sp-4); background: var(--bg-tertiary); border-radius: var(--border-radius);">
           <h4 style="font-size: var(--fs-sm); color: var(--neon-purple); margin-bottom: var(--sp-2);">
@@ -298,19 +380,20 @@ const CoinDetail = {
           <div style="display:flex; gap: var(--sp-6); font-size: var(--fs-sm);">
             <div><span class="text-secondary">Score:</span> <strong>${data.reddit_sentiment.sentiment_score}/100</strong> (${data.reddit_sentiment.sentiment_label})</div>
             <div><span class="text-secondary">Posts:</span> ${data.reddit_sentiment.posts_analyzed}</div>
-            <div class="text-gain">↑ ${data.reddit_sentiment.positive_signals}</div>
-            <div class="text-loss">↓ ${data.reddit_sentiment.negative_signals}</div>
+            <div class="text-gain">+ ${data.reddit_sentiment.positive_signals}</div>
+            <div class="text-loss">- ${data.reddit_sentiment.negative_signals}</div>
           </div>
         </div>
       ` : ''}
 
+      <!-- Explain Why -->
       <button class="explain-why-btn" onclick="CoinDetail.toggleExplainWhy()">
         <i class="fas fa-lightbulb"></i> Explain Why
       </button>
 
       <div class="explain-box" id="explain-box" style="display:none;">
-        <span class="explain-icon">💡</span>
-        <p>${data.explanation || 'No explanation available.'}</p>
+        <span class="explain-icon">&#128161;</span>
+        <p>${data.explanation || data.explain_why || 'No explanation available.'}</p>
       </div>
     `;
   },
