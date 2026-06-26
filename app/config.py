@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     # ── API Keys ──
     coingecko_api_key: str = Field(default="", alias="COINGECKO_API_KEY")
     groq_api_key: str = Field(default="", alias="GROQ_API_KEY")
-    groq_model: str = Field(default="llama3-8b-8192", alias="GROQ_MODEL")
+    groq_model: str = Field(default="llama-3.1-8b-instant", alias="GROQ_MODEL")
     reddit_client_id: str = Field(default="", alias="REDDIT_CLIENT_ID")
     reddit_client_secret: str = Field(default="", alias="REDDIT_CLIENT_SECRET")
     reddit_user_agent: str = Field(default="CryptoTerminal/1.0", alias="REDDIT_USER_AGENT")
