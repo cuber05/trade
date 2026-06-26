@@ -11,8 +11,10 @@ from functools import lru_cache
 from pydantic_settings import BaseSettings
 from pydantic import Field
 
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+IS_VERCEL = os.environ.get("VERCEL") == "1" or os.environ.get("VERCEL_ENV") is not None
 
 
 class Settings(BaseSettings):
@@ -33,8 +35,8 @@ class Settings(BaseSettings):
 
     # ── Paths ──
     static_dir: Path = BASE_DIR / "static"
-    data_dir: Path = BASE_DIR / "data"
-    db_path: Path = BASE_DIR / "data" / "cryptoterminal.db"
+    data_dir: Path = Path("/tmp") if IS_VERCEL else BASE_DIR / "data"
+    db_path: Path = Path("/tmp/cryptoterminal.db") if IS_VERCEL else BASE_DIR / "data" / "cryptoterminal.db"
 
     # ── Cache TTL (seconds) ──
     cache_ttl_market: int = 60
