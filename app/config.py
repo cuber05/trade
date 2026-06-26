@@ -22,8 +22,8 @@ class Settings(BaseSettings):
 
     # ── API Keys ──
     coingecko_api_key: str = Field(default="", alias="COINGECKO_API_KEY")
-    openai_api_key: str = Field(default="", alias="OPENAI_API_KEY")
-    openai_model: str = Field(default="gpt-4o-mini", alias="OPENAI_MODEL")
+    groq_api_key: str = Field(default="", alias="GROQ_API_KEY")
+    groq_model: str = Field(default="llama3-8b-8192", alias="GROQ_MODEL")
     reddit_client_id: str = Field(default="", alias="REDDIT_CLIENT_ID")
     reddit_client_secret: str = Field(default="", alias="REDDIT_CLIENT_SECRET")
     reddit_user_agent: str = Field(default="CryptoTerminal/1.0", alias="REDDIT_USER_AGENT")
@@ -80,8 +80,8 @@ class Settings(BaseSettings):
         return self.coingecko_base_url
 
     @property
-    def has_openai(self) -> bool:
-        return bool(self.openai_api_key)
+    def has_groq(self) -> bool:
+        return bool(self.groq_api_key)
 
     @property
     def has_reddit(self) -> bool:

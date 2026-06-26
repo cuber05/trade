@@ -365,3 +365,72 @@
   background: rgba(136, 146, 176, 0.1);
   color: var(--text-secondary);
 }
+
+/* ---- Learn / Academy ---- */
+.learn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--sp-5);
+  margin-top: var(--sp-4);
+}
+.learn-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--sp-5);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.learn-card:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-sm), 0 0 15px var(--neon-green-glow);
+  transform: translateY(-2px);
+}
+.learn-card-icon {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-4);
+}
+.learn-card-title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  margin-bottom: var(--sp-2);
+  color: var(--text-primary);
+}
+.learn-card-desc {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+.learn-card-level {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: var(--bg-elevated);
+}
+.learn-card-level.beginner { color: var(--gain); }
+.learn-card-level.intermediate { color: var(--warning); }
+.learn-card-level.advanced { color: var(--loss); }
+.learn-detail {
+  line-height: 1.6;
+}
+.learn-detail h4 {
+  margin-bottom: var(--sp-3);
+  color: var(--neon-green);
+}
+.tip-box {
+  margin-top: var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--bg-tertiary);
+  border-left: 3px solid var(--neon-green);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  font-size: var(--fs-sm);
+}

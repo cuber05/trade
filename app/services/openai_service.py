@@ -29,7 +29,7 @@ async def generate_ai_analysis(
     Returns None if OpenAI is not configured (caller should use built-in engine).
     """
     settings = get_settings()
-    if not settings.has_openai:
+    if not settings.has_groq:
         return None
 
     coin_name = coin_data.get("name", "Unknown")
@@ -140,13 +140,13 @@ Respond in this exact JSON format:
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 resp = await client.post(
-                    "https://api.openai.com/v1/chat/completions",
+                    "https://api.groq.com/openai/v1/chat/completions",
                     headers={
-                        "Authorization": f"Bearer {settings.openai_api_key}",
+                        "Authorization": f"Bearer {settings.groq_api_key}",
                         "Content-Type": "application/json",
                     },
                     json={
-                        "model": settings.openai_model,
+                        "model": settings.groq_model,
                         "messages": [{"role": "user", "content": prompt}],
                         "temperature": 0.3,
                         "max_tokens": 800,
@@ -158,8 +158,8 @@ Respond in this exact JSON format:
 
                 content = result["choices"][0]["message"]["content"]
                 analysis = json.loads(content)
-                analysis["source"] = "openai"
-                analysis["model"] = settings.openai_model
+                analysis["source"] = "groq"
+                analysis["model"] = settings.groq_model
                 return analysis
 
         except json.JSONDecodeError as e:

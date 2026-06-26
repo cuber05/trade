@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings, BASE_DIR
 from app.database import init_db
 from app.cache import cache
-from app.routers import market, coins, portfolio, alerts, dex_defi
+from app.routers import market, coins, alerts, dex_defi
 
 # Configure logging
 logging.basicConfig(
@@ -65,7 +65,6 @@ app.add_middleware(
 # ── Register API Routers ──
 app.include_router(market.router)
 app.include_router(coins.router)
-app.include_router(portfolio.router)
 app.include_router(alerts.router)
 app.include_router(dex_defi.router)
 

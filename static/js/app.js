@@ -11,7 +11,7 @@ const App = {
     const loadingScreen = document.getElementById('loading-screen');
     const appShell = document.getElementById('app');
     if (loadingScreen) loadingScreen.style.display = 'none';
-    if (appShell) appShell.style.display = 'block';
+    if (appShell) appShell.style.display = 'flex';
 
     // Check path for deep linking
     const path = window.location.pathname;
@@ -27,7 +27,6 @@ const App = {
       const view = Store.get('currentView');
       if (view === 'dashboard') Dashboard.init();
       if (view === 'markets') Markets.loadMarkets();
-      if (view === 'portfolio') Portfolio.loadPortfolio();
       if (view === 'watchlist') Watchlist.loadWatchlist();
       if (view === 'alerts') Alerts.loadAlerts();
     }, 60000); // Every minute
@@ -43,9 +42,22 @@ const App = {
       });
     });
 
+    // Sidebar Toggle
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    if (sidebarToggle) {
+      sidebarToggle.addEventListener('click', () => {
+        const sidebar = document.getElementById('sidebar');
+        if (window.innerWidth <= 768) {
+          sidebar.classList.toggle('open');
+        } else {
+          sidebar.classList.toggle('collapsed');
+        }
+      });
+    }
+
     // Global Search
     const searchInput = document.getElementById('global-search');
-    const searchResults = document.getElementById('search-results');
+    const searchResults = document.getElementById('search-dropdown');
 
     searchInput.addEventListener('input', Utils.debounce(async (e) => {
       const query = e.target.value.trim();
@@ -76,8 +88,16 @@ const App = {
 
     // Close search on click outside
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.topbar-search')) {
+      if (!e.target.closest('.search-container')) {
         searchResults.classList.remove('active');
+      }
+    });
+
+    // Ctrl+K to focus search
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
       }
     });
   },
@@ -110,7 +130,6 @@ const App = {
     switch(viewName) {
       case 'dashboard': Dashboard.init(); break;
       case 'markets': Markets.init(); break;
-      case 'portfolio': Portfolio.init(); break;
       case 'watchlist': Watchlist.init(); break;
       case 'alerts': Alerts.init(); break;
       case 'learn': if(window.Learn) Learn.init(); break;
