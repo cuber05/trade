@@ -1,305 +1,110 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/CryptoTerminal-v1.0-00ff88?style=for-the-badge&logo=bitcoin&logoColor=white" alt="Version" />
-  <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License" />
-</p>
+# CryptoTerminal
 
-# 📊 CryptoTerminal
+CryptoTerminal is a professional-grade cryptocurrency intelligence dashboard designed for retail crypto traders. Built with a dark, Bloomberg Terminal-style aesthetic, it provides traders with the same caliber of analysis tools that institutions use, including real-time market data, AI-driven sentiment analysis, and portfolio tracking.
 
-**AI-Powered Bloomberg Terminal for Retail Crypto Traders**
+## Overview
 
-A professional-grade cryptocurrency intelligence dashboard that goes beyond basic price tracking. Built with a dark Bloomberg Terminal aesthetic, glassmorphism, and neon green accents — CryptoTerminal gives retail traders the same caliber of analysis tools that institutions use.
+CryptoTerminal goes beyond basic price tracking by aggregating data from multiple decentralized and centralized sources. It features a built-in AI engine that analyzes market sentiment, technical indicators, and community metrics to provide a comprehensive "Explain Why" narrative for any coin's price movement.
 
----
+## Key Features
 
-## ✨ Features
+### 1. Market Dashboard
+- Global Market Metrics: Track total crypto market cap, 24-hour volume, and Bitcoin/Ethereum dominance.
+- Fear & Greed Index: Real-time gauge with a 30-day historical view to measure overall market sentiment.
+- Trending Coins: Live feed of what is currently hot across major aggregators.
+- Top Gainers & Losers: Quickly identify the biggest 24-hour market movers.
+- Market Heatmap: Visual grid of market performance categorized by 24h or 7d price changes.
+- Market Dominance: Interactive pie chart of BTC, ETH, and altcoin dominance.
 
-### 🏠 Dashboard
-- **Global Market Overview** — Total crypto market cap, 24h volume, BTC dominance
-- **Fear & Greed Index** — Real-time gauge with 30-day history
-- **Trending Coins** — What's hot on CoinGecko right now
-- **Top Gainers & Losers** — Biggest 24h movers
-- **Market Heatmap** — Visual grid of market performance
-- **Bitcoin Price Chart** — TradingView-style interactive chart
-- **Market Dominance** — Pie chart of BTC/ETH/altcoin dominance
+### 2. Deep Coin Analysis
+- Interactive Charts: View TradingView-style interactive candlestick and area charts for any cryptocurrency.
+- Comprehensive Market Data: Access price, volume, market cap, ATH/ATL, and circulating/max supply.
+- Developer & Community Activity: Track GitHub commits, stars, Twitter followers, and Reddit subscribers to gauge project health.
+- Reddit Sentiment: Pulls live discussions from subreddits like r/CryptoCurrency to determine if retail sentiment is bullish or bearish.
 
-### 🔍 Coin Analysis
-- **Live Price & Charts** — Interactive candlestick charts (TradingView Lightweight Charts)
-- **Market Data** — Price, volume, market cap, ATH/ATL, circulating supply
-- **Exchange Listings** — Where to trade
-- **Developer Activity** — GitHub commits, stars, contributors
-- **Community Metrics** — Twitter followers, Reddit subscribers
+### 3. AI-Powered Rating System
+- Score (0-100): Multi-factor algorithmic analysis scoring coins from Strong Sell to Strong Buy.
+- Risk Assessment: Classifies investments as Low, Medium, High, or Very High risk based on volatility and market cap.
+- Factor Breakdown: Explicit lists of bullish and bearish signals driving the AI's score.
+- "Explain Why" Button: Generates a natural-language explanation of why a coin is moving today, combining price action, news, and sentiment into a digestible summary.
 
-### 🤖 AI Rating System
-- **Score 0–100** — Multi-factor algorithmic analysis
-- **Bullish/Bearish Sentiment** — Clear directional signal
-- **Risk Assessment** — Low / Medium / High / Very High
-- **Factor Breakdown** — See exactly what's driving the score
-- **"Explain Why" Button** — Natural-language explanation of why a coin is moving
+### 4. Portfolio Management
+- Add Holdings: Input your buy price, amount, and date.
+- Real-time P&L: Automatically calculates profit and loss based on current market prices.
+- Allocation Chart: Visual breakdown of your portfolio distribution.
 
-### 💼 Portfolio Tracking
-- **Add Holdings** — Track buy price, amount, date
-- **Real-time P&L** — Profit/loss with current market prices
-- **Allocation Chart** — Visual breakdown of your portfolio
-- **Performance History** — Track your portfolio over time
+### 5. Watchlist & Alerts
+- Custom Watchlist: Save and monitor your favorite coins in one place.
+- Advanced Alerts: Set custom triggers for price thresholds (above/below), volume spikes, percentage changes, or shifts in the Fear & Greed index.
 
-### ⭐ Watchlist
-- **Quick Add** — Add any coin to your watchlist
-- **Live Prices** — Real-time price updates
-- **Quick Actions** — Jump to analysis from watchlist
+### 6. Crypto Academy (Learn)
+- Built-in educational resources explaining core concepts like Market Cap, Trading Volume, RSI, and MACD to help beginner traders make informed decisions.
 
-### 🔔 Alerts
-- **Price Alerts** — Above/below thresholds
-- **Volume Spike Alerts** — Catch unusual activity
-- **Fear & Greed Alerts** — Market sentiment shifts
-- **Alert History** — Review triggered alerts
+## Architecture & Tech Stack
 
-### 📚 Crypto Academy
-- **Market Cap** — What it means and why it matters
-- **Volume** — Reading trading volume
-- **RSI & MACD** — Technical indicators explained
-- **Candlestick Patterns** — Reading charts like a pro
-- **Support & Resistance** — Key price levels
-- **Trading Psychology** — Managing emotions
+CryptoTerminal is a modern Single Page Application (SPA) powered by a fast, asynchronous backend.
 
----
+- Backend: Python 3.11+, FastAPI, Uvicorn
+- Database: SQLite (via aiosqlite) for local persistence of portfolios and alerts
+- Caching: In-memory TTL caching to prevent rate-limiting from external APIs
+- Frontend: Vanilla HTML, CSS (Custom Design System), and JavaScript
+- Charts: TradingView Lightweight Charts, Chart.js
 
-## 🏗️ Architecture
+### API Integrations
+The application seamlessly aggregates data from:
+- CoinGecko (Prices, market data, charts)
+- DexScreener (Trending pairs, liquidity, new tokens)
+- GeckoTerminal (DEX analytics, pools)
+- DefiLlama (TVL, chains, stablecoins)
+- Alternative.me (Fear & Greed Index)
+- Reddit API (Community sentiment)
+- OpenAI (GPT-4o-mini for advanced AI analysis)
 
-```
-CryptoTerminal/
-├── app/                          # Python FastAPI Backend
-│   ├── main.py                   # App entry point + static file serving
-│   ├── config.py                 # Settings & environment variables
-│   ├── cache.py                  # In-memory TTL cache
-│   ├── database.py               # SQLite persistence (portfolio, alerts)
-│   ├── routers/                  # API route handlers
-│   │   ├── market.py             # /api/v1/market/* endpoints
-│   │   ├── coins.py              # /api/v1/coins/* endpoints
-│   │   ├── portfolio.py          # /api/v1/portfolio/* & watchlist
-│   │   └── alerts.py             # /api/v1/alerts/* endpoints
-│   └── services/                 # External API integrations
-│       ├── coingecko.py          # CoinGecko API (prices, charts, etc.)
-│       ├── fear_greed.py         # Alternative.me Fear & Greed Index
-│       └── ai_engine.py          # Built-in AI analysis engine
-├── static/                       # Frontend (served by FastAPI)
-│   ├── index.html                # Single-page app shell
-│   ├── css/                      # Stylesheets
-│   │   ├── variables.css         # Design tokens
-│   │   ├── base.css              # Reset & utilities
-│   │   ├── layout.css            # App shell layout
-│   │   ├── components.css        # Reusable components
-│   │   ├── dashboard.css         # Dashboard grid
-│   │   ├── coin-detail.css       # Coin analysis page
-│   │   ├── portfolio.css         # Portfolio page
-│   │   ├── alerts.css            # Alerts page
-│   │   └── animations.css        # Micro-animations
-│   └── js/                       # JavaScript modules
-│       ├── app.js                # Main app controller & routing
-│       ├── api.js                # Backend API client
-│       ├── utils.js              # Formatting & helpers
-│       ├── store.js              # Client-side state management
-│       ├── charts.js             # Chart rendering (TradingView + Chart.js)
-│       ├── dashboard.js          # Dashboard logic
-│       ├── markets.js            # Markets table
-│       ├── coin-detail.js        # Coin analysis page
-│       ├── portfolio.js          # Portfolio management
-│       ├── watchlist.js          # Watchlist management
-│       ├── alerts.js             # Alert management
-│       └── learn.js              # Crypto Academy content
-├── data/                         # SQLite database (auto-created)
-├── venv/                         # Python virtual environment
-├── requirements.txt              # Python dependencies
-├── Dockerfile                    # Container deployment
-├── render.yaml                   # Render.com deployment
-├── .env.example                  # Environment variable template
-├── .gitignore                    # Git ignore rules
-└── README.md                     # You are here
-```
+*Note: DexScreener, GeckoTerminal, DefiLlama, and Alternative.me are completely free public APIs and do not require API keys.*
 
----
-
-## 🚀 Quick Start
+## Quick Start Guide
 
 ### Prerequisites
-- **Python 3.11+** installed
-- **Git** (optional, for cloning)
+- Python 3.11 or higher installed on your system.
 
-### 1. Clone & Enter
+### Installation
 
-```bash
-git clone https://github.com/yourusername/cryptoterminal.git
-cd cryptoterminal
-```
+1. Clone the repository and navigate into the directory:
+   git clone https://github.com/yourusername/cryptoterminal.git
+   cd cryptoterminal
 
-### 2. Create Virtual Environment
+2. Create and activate a virtual environment:
+   # Windows
+   python -m venv venv
+   venv\Scripts\activate
 
-```bash
-python -m venv venv
+   # macOS/Linux
+   python -m venv venv
+   source venv/bin/activate
 
-# Windows
-venv\Scripts\activate
+3. Install the required dependencies:
+   pip install -r requirements.txt
 
-# macOS/Linux
-source venv/bin/activate
-```
+4. Configure the environment:
+   Copy the `.env.example` file to a new file named `.env`. 
+   cp .env.example .env
 
-### 3. Install Dependencies
+   You can optionally add your CoinGecko, OpenAI, and Reddit API keys to the `.env` file for higher rate limits and advanced AI features. The app will gracefully fall back to free tiers and internal algorithms if these are left blank.
 
-```bash
-pip install -r requirements.txt
-```
+5. Start the development server:
+   uvicorn app.main:app --reload --port 8000
 
-### 4. Configure Environment
+6. Access the application:
+   Open your web browser and navigate to http://localhost:8000
 
-```bash
-# Copy the example env file
-cp .env.example .env
+## Usage Instructions
 
-# Edit .env and add your API keys (optional — works without them)
-```
+- Navigating the App: Use the left sidebar to switch between the Dashboard, Markets, Portfolio, Watchlist, Alerts, and Learn sections.
+- Analyzing a Coin: Click on any coin from the Dashboard heatmap, Trending list, or Markets table to open the detailed Coin Analysis page.
+- Using AI Analysis: On the Coin Analysis page, wait for the AI score to generate. Click "Explain Why" to read the AI's natural language breakdown of the asset's current market position.
+- Managing Portfolio: Go to the Portfolio tab, click "Add Holding", search for your coin, and enter your purchase details. The app will automatically track your P&L.
+- Setting Alerts: Navigate to the Alerts tab to create custom notifications for price movements or market sentiment shifts.
 
-### 5. Run the Server
+## License
 
-```bash
-uvicorn app.main:app --reload --port 8000
-```
-
-### 6. Open in Browser
-
-Navigate to **[http://localhost:8000](http://localhost:8000)** 🎉
-
----
-
-## 🔑 API Keys (Optional)
-
-CryptoTerminal works out of the box with **no API keys** — using CoinGecko's free tier and Alternative.me's public API. Add keys to increase rate limits:
-
-| API | Purpose | Free Tier | Get Key |
-|-----|---------|-----------|---------|
-| **CoinGecko** | Price, market, chart data | 10-30 calls/min | [coingecko.com/api](https://www.coingecko.com/en/api) |
-| **CryptoPanic** | Crypto news feed | 5 calls/min | [cryptopanic.com/developers](https://cryptopanic.com/developers/api/) |
-
-Add keys to your `.env` file:
-
-```env
-COINGECKO_API_KEY=your_key_here
-CRYPTOPANIC_API_KEY=your_key_here
-```
-
----
-
-## 🌐 Deployment
-
-### Deploy to Render.com (Recommended)
-
-1. Push your code to GitHub
-2. Go to [render.com](https://render.com) → New → Web Service
-3. Connect your GitHub repo
-4. Render will auto-detect the `render.yaml` config
-5. Add your API keys as environment variables
-6. Click **Deploy** ✅
-
-### Deploy with Docker
-
-```bash
-# Build the image
-docker build -t cryptoterminal .
-
-# Run the container
-docker run -p 8000:8000 --env-file .env cryptoterminal
-```
-
-### Deploy to Railway
-
-```bash
-# Install Railway CLI
-npm install -g @railway/cli
-
-# Login and deploy
-railway login
-railway init
-railway up
-```
-
-### Deploy to Fly.io
-
-```bash
-fly launch
-fly secrets set COINGECKO_API_KEY=your_key
-fly deploy
-```
-
----
-
-## 📡 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/v1/market/global` | Global market data |
-| `GET` | `/api/v1/market/fear-greed` | Fear & Greed Index |
-| `GET` | `/api/v1/market/trending` | Trending coins |
-| `GET` | `/api/v1/market/coins` | Coin listings (paginated) |
-| `GET` | `/api/v1/market/gainers-losers` | Top gainers & losers |
-| `GET` | `/api/v1/market/search?q=` | Search coins |
-| `GET` | `/api/v1/coins/{id}` | Coin detail data |
-| `GET` | `/api/v1/coins/{id}/chart` | Price chart data |
-| `GET` | `/api/v1/coins/{id}/ohlc` | Candlestick data |
-| `GET` | `/api/v1/coins/{id}/ai-analysis` | AI analysis & score |
-| `GET` | `/api/v1/portfolio` | Get portfolio holdings |
-| `POST` | `/api/v1/portfolio` | Add holding |
-| `PUT` | `/api/v1/portfolio/{id}` | Update holding |
-| `DELETE` | `/api/v1/portfolio/{id}` | Delete holding |
-| `GET` | `/api/v1/watchlist` | Get watchlist |
-| `POST` | `/api/v1/watchlist` | Add to watchlist |
-| `DELETE` | `/api/v1/watchlist/{coin_id}` | Remove from watchlist |
-| `GET` | `/api/v1/alerts` | Get alerts |
-| `POST` | `/api/v1/alerts` | Create alert |
-| `DELETE` | `/api/v1/alerts/{id}` | Delete alert |
-| `PUT` | `/api/v1/alerts/{id}/toggle` | Toggle alert on/off |
-| `GET` | `/api/health` | Health check |
-
-Interactive API docs available at **`/docs`** (Swagger UI).
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Backend** | Python 3.11+, FastAPI, uvicorn |
-| **Database** | SQLite (via aiosqlite) |
-| **Caching** | In-memory TTL cache |
-| **HTTP Client** | httpx (async) |
-| **Frontend** | Vanilla HTML/CSS/JS |
-| **Charts** | TradingView Lightweight Charts, Chart.js |
-| **Icons** | Font Awesome 6 |
-| **Fonts** | Inter, JetBrains Mono (Google Fonts) |
-
----
-
-## 🗺️ Roadmap
-
-- [ ] WebSocket support for real-time price streaming
-- [ ] CryptoPanic news integration
-- [ ] GeckoTerminal DEX/meme coin data
-- [ ] Reddit sentiment analysis
-- [ ] X (Twitter) sentiment tracking
-- [ ] OpenAI-powered advanced AI analysis
-- [ ] Push notifications (browser + mobile)
-- [ ] Multi-currency support (EUR, GBP, INR)
-- [ ] Export portfolio to CSV/PDF
-- [ ] Dark/light theme toggle
-
----
-
-## 📄 License
-
-MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-<p align="center">
-  Built with ❤️ and ☕ for crypto traders who deserve better tools.
-</p>
+This project is licensed under the MIT License. See the LICENSE file for details.
