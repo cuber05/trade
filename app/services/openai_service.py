@@ -18,73 +18,27 @@ from app.cache import cache
 logger = logging.getLogger(__name__)
 
 # ── System Prompt ──────────────────────────────────────────────────
-SYSTEM_PROMPT = """You are CryptoTerminal AI, a professional cryptocurrency research analyst.
+SYSTEM_PROMPT = """You are CryptoTerminal AI, a crypto analyst.
+Analyze the provided market data. DO NOT predict the future or recommend buying.
 
-Your job is NOT to predict the future or tell users to buy or sell.
+CRITICAL ANALYSIS:
+1. Overall Market: Bullish/bearish/neutral? How does BTC affect this coin?
+2. Sector Comparison: Compare against provided sector peers. Is this a sector rally or coin-specific move? Name specific peers and numbers.
+3. Momentum/Liquidity: High Volume/MCap ratio (>10%) means high activity. Compare volume to typical.
+4. Community/Dev: Summarize Reddit sentiment and dev activity.
+5. Risks & Opportunities: List key risks, warning signs, and catalysts.
+6. Explain Why: WHY is the price moving? (e.g., sector rally, exchange listing, whale, following BTC).
 
-Your job is to analyze objective market data and explain what it means.
+Scoring:
+90-100: Exceptional, strong fundamentals.
+75-89: Strong setup, manageable risks.
+60-74: Mixed outlook.
+40-59: Weak setup.
+20-39: Very weak.
+0-19: Extremely risky.
+Confidence: High if data agrees, Low if conflicting/missing.
 
-You will receive live market information including:
-- Coin name, Current price, 24h/7d/30d price change
-- Market Cap, Volume, Volume/Market Cap Ratio
-- Circulating Supply, Max Supply
-- All Time High, Distance from ATH
-- Coin Rank, BTC Dominance, Global Market Cap
-- Fear & Greed Index, Reddit Sentiment
-- Developer Activity (GitHub commits, stars, forks)
-- Community data (Twitter followers, Reddit subscribers)
-- SECTOR PEER DATA: Performance of comparable coins in the same category
-- TRENDING DATA: What coins are currently trending on CoinGecko
-
-Analyze the data exactly like an experienced crypto trader.
-
-Your analysis must NEVER be based on feelings or assumptions.
-
-CRITICAL ANALYSIS REQUIREMENTS:
-
-1. Overall Market — Is the crypto market bullish, bearish or neutral? Is Bitcoin helping or hurting this coin?
-
-2. Sector Comparison (MOST IMPORTANT) — You MUST compare this coin against the sector peers provided.
-   - If the coin is up 33% and peers like BONK, WIF, POPCAT are also up 20-40%, say "This is a sector-wide rally across [category], not coin-specific."
-   - If the coin is up 33% and peers are flat or down, say "This is an isolated move specific to [coin]. Possible catalysts: exchange listing, whale activity, or news."
-   - Always name the specific peers and their performance numbers.
-
-3. Momentum — Is momentum increasing, decreasing or fading? Compare current volume to typical volume (use Volume/MCap ratio).
-
-4. Liquidity — Does the coin have healthy trading activity? A Volume/MCap ratio above 10% = high activity. Below 2% = low liquidity.
-
-5. Community — Analyze Reddit sentiment and community strength.
-
-6. Development — Does development activity support long-term growth?
-
-7. Risk — Explain every major risk separately.
-
-8. Opportunity — What would need to happen for the coin to continue rising?
-
-9. Warning Signs — List anything that could cause a sudden decline.
-
-10. Why is the price moving? — This is the key question users care about most. Use the sector peer data, trending data, and volume to form a hypothesis:
-    - "Sector rally" — if peers are all up similarly
-    - "Exchange listing" — if volume is unusually high compared to market cap
-    - "Whale buying" — if volume spiked dramatically without matching peer movement
-    - "Following Bitcoin" — if BTC is up and the move correlates
-    - "Speculation/Hype" — if trending on CoinGecko with thin fundamentals
-
-Scoring Rules:
-- 90-100: Exceptional opportunity with strong momentum and strong fundamentals.
-- 75-89: Strong setup with manageable risks.
-- 60-74: Mixed outlook. Some positive signals but noticeable risks.
-- 40-59: Weak setup. Only suitable for experienced traders.
-- 20-39: Very weak. High downside risk.
-- 0-19: Extremely risky or collapsing project.
-
-Confidence measures how reliable the analysis is.
-High confidence = many data points agree. Low confidence = conflicting signals or missing data.
-Never confuse Score with Confidence.
-
-Never recommend buying. Never promise future returns.
-Always explain WHY every conclusion was reached using the supplied data.
-Write concise, professional explanations similar to Bloomberg, Messari or Glassnode — not social media influencers."""
+Respond ONLY with valid JSON."""
 
 
 async def generate_ai_analysis(
@@ -191,43 +145,36 @@ Negative Signals: {reddit_sentiment['negative_signals']}
 """)
 
     # Sector peers comparison — critical for answering "Is this a sector rally?"
+    # Sector peers comparison
     if sector_peers and isinstance(sector_peers, list) and len(sector_peers) > 0:
         coin_id = coin_data.get("id", "")
         peers_lines = []
-        for p in sector_peers[:8]:
+        for p in sector_peers[:4]:
             if p.get("id") == coin_id:
-                continue  # Skip the coin itself
+                continue
+            if len(peers_lines) >= 3:
+                break
             p_name = p.get("name", "?")
             p_symbol = (p.get("symbol", "?")).upper()
             p_pct24 = p.get("price_change_percentage_24h", 0) or 0
-            p_pct7d = p.get("price_change_percentage_7d_in_currency", 0) or 0
-            p_vol = p.get("total_volume", 0) or 0
-            p_mcap = p.get("market_cap", 0) or 0
-            peers_lines.append(
-                f"  - {p_name} ({p_symbol}): 24h {p_pct24:+.2f}%, 7d {p_pct7d:+.2f}%, Vol ${p_vol:,.0f}, MCap ${p_mcap:,.0f}"
-            )
+            peers_lines.append(f"- {p_name} ({p_symbol}): 24h {p_pct24:+.1f}%")
         if peers_lines:
-            categories = coin_data.get("categories", [])
-            cat_label = categories[0] if categories else "Same Sector"
             context_parts.append(f"""
-SECTOR PEER COMPARISON ({cat_label}):
-Compare the coin's performance against these peers to determine if the move is coin-specific or a sector-wide rally:
+SECTOR PEERS (Compare to detect sector rally):
 {chr(10).join(peers_lines)}
 """)
 
-    # Trending coins — what else is hot right now
+    # Trending coins
     if trending_data and trending_data.get("coins"):
         trending_lines = []
-        for item in trending_data["coins"][:7]:
+        for item in trending_data["coins"][:3]:
             tc = item.get("item", {})
             t_name = tc.get("name", "?")
-            t_symbol = (tc.get("symbol", "?")).upper()
-            t_rank = tc.get("market_cap_rank", "?")
             t_pct24 = tc.get("data", {}).get("price_change_percentage_24h", {}).get("usd", 0) or 0
-            trending_lines.append(f"  - {t_name} ({t_symbol}): 24h {t_pct24:+.2f}%, Rank #{t_rank}")
+            trending_lines.append(f"- {t_name}: {t_pct24:+.1f}%")
         if trending_lines:
             context_parts.append(f"""
-CURRENTLY TRENDING ON COINGECKO:
+TRENDING:
 {chr(10).join(trending_lines)}
 """)
 
@@ -275,7 +222,7 @@ Respond in this exact JSON format only, no markdown, no extra text:
                             {"role": "user", "content": user_prompt},
                         ],
                         "temperature": 0.3,
-                        "max_tokens": 1200,
+                        "max_tokens": 800,
                         "response_format": {"type": "json_object"},
                     },
                 )
