@@ -1,0 +1,291 @@
+/* ============================================
+   CryptoTerminal — Base Styles
+   ============================================ */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+a {
+  color: var(--neon-green);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--neon-green-dim);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(136, 146, 176, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(136, 146, 176, 0.35);
+}
+
+::selection {
+  background: var(--neon-green-glow-strong);
+  color: var(--text-primary);
+}
+
+/* ---- Loading Screen ---- */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loading);
+  background: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loading-content {
+  text-align: center;
+}
+.loading-logo {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--sp-6);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  justify-content: center;
+}
+.loading-logo i {
+  color: var(--neon-green);
+  text-shadow: 0 0 20px var(--neon-green-glow-strong);
+}
+.loading-bar {
+  width: 240px;
+  height: 3px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 auto var(--sp-4);
+}
+.loading-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  border-radius: 2px;
+  animation: loadingFill 2s ease-in-out forwards;
+}
+@keyframes loadingFill {
+  0% { width: 0%; }
+  30% { width: 40%; }
+  60% { width: 70%; }
+  90% { width: 90%; }
+  100% { width: 100%; }
+}
+.loading-text {
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+/* ---- Utility Classes ---- */
+.text-gain { color: var(--gain) !important; }
+.text-loss { color: var(--loss) !important; }
+.text-neutral { color: var(--neutral) !important; }
+.text-accent { color: var(--neon-green) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+.text-mono { font-family: var(--font-mono) !important; }
+
+.bg-gain { background: var(--gain-bg) !important; }
+.bg-loss { background: var(--loss-bg) !important; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+/* ---- Button Styles ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--neon-green);
+  color: var(--text-inverse);
+  box-shadow: 0 0 12px var(--neon-green-glow);
+}
+.btn-primary:hover {
+  background: var(--neon-green-dim);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-color-hover);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--neon-green);
+  border: 1px solid var(--border-accent);
+}
+.btn-outline:hover {
+  background: var(--neon-green-glow);
+}
+.btn-danger {
+  background: var(--loss-bg);
+  color: var(--loss);
+  border: 1px solid rgba(255, 59, 92, 0.2);
+}
+.btn-danger:hover {
+  background: var(--loss-bg-strong);
+}
+.btn-sm {
+  padding: var(--sp-1) var(--sp-2);
+  font-size: var(--fs-xs);
+}
+.btn-lg {
+  padding: var(--sp-3) var(--sp-6);
+  font-size: var(--fs-md);
+}
+.btn-icon {
+  padding: var(--sp-2);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm);
+}
+
+/* ---- Badge Styles ---- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+}
+.badge-gain {
+  background: var(--gain-bg);
+  color: var(--gain);
+}
+.badge-loss {
+  background: var(--loss-bg);
+  color: var(--loss);
+}
+.badge-neutral {
+  background: rgba(136, 146, 176, 0.1);
+  color: var(--text-secondary);
+}
+.badge-accent {
+  background: var(--neon-green-glow);
+  color: var(--neon-green);
+}
+.badge-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+/* ---- Skeleton Loading ---- */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-elevated) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--border-radius-sm);
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-text {
+  height: 12px;
+  width: 80%;
+  margin-bottom: 8px;
+}
+.skeleton-text.short {
+  width: 40%;
+}
+.skeleton-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}

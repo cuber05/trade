@@ -1,0 +1,120 @@
+/* ============================================
+   CryptoTerminal — Design Tokens
+   Bloomberg Terminal meets TradingView
+   ============================================ */
+
+:root {
+  /* ---- Core Palette ---- */
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f1623;
+  --bg-tertiary: #141c2e;
+  --bg-elevated: #1a2340;
+  --bg-surface: rgba(20, 28, 46, 0.85);
+  --bg-glass: rgba(15, 22, 35, 0.75);
+  --bg-glass-hover: rgba(20, 30, 50, 0.85);
+
+  /* ---- Accent Colors ---- */
+  --neon-green: #00ff88;
+  --neon-green-dim: #00cc6a;
+  --neon-green-glow: rgba(0, 255, 136, 0.15);
+  --neon-green-glow-strong: rgba(0, 255, 136, 0.3);
+  --neon-blue: #00d4ff;
+  --neon-blue-dim: #00a8cc;
+  --neon-purple: #a855f7;
+  --neon-purple-dim: #7c3aed;
+  --neon-orange: #ff9500;
+  --neon-pink: #ff3b8b;
+  --neon-cyan: #06d6a0;
+  --neon-yellow: #ffd60a;
+
+  /* ---- Semantic Colors ---- */
+  --gain: #00ff88;
+  --gain-bg: rgba(0, 255, 136, 0.08);
+  --gain-bg-strong: rgba(0, 255, 136, 0.15);
+  --loss: #ff3b5c;
+  --loss-bg: rgba(255, 59, 92, 0.08);
+  --loss-bg-strong: rgba(255, 59, 92, 0.15);
+  --neutral: #8892b0;
+  --warning: #ffd60a;
+  --warning-bg: rgba(255, 214, 10, 0.1);
+
+  /* ---- Text Colors ---- */
+  --text-primary: #e6f1ff;
+  --text-secondary: #8892b0;
+  --text-tertiary: #5a6580;
+  --text-inverse: #0a0e17;
+  --text-accent: var(--neon-green);
+
+  /* ---- Borders ---- */
+  --border-color: rgba(136, 146, 176, 0.12);
+  --border-color-hover: rgba(136, 146, 176, 0.25);
+  --border-accent: rgba(0, 255, 136, 0.3);
+  --border-radius-sm: 6px;
+  --border-radius: 10px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(0, 255, 136, 0.15);
+  --shadow-glow-strong: 0 0 40px rgba(0, 255, 136, 0.25);
+
+  /* ---- Typography ---- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --fs-xs: 0.6875rem;   /* 11px */
+  --fs-sm: 0.75rem;     /* 12px */
+  --fs-base: 0.8125rem; /* 13px */
+  --fs-md: 0.875rem;    /* 14px */
+  --fs-lg: 1rem;        /* 16px */
+  --fs-xl: 1.25rem;     /* 20px */
+  --fs-2xl: 1.5rem;     /* 24px */
+  --fs-3xl: 2rem;       /* 32px */
+  --fs-4xl: 2.5rem;     /* 40px */
+
+  --fw-light: 300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+
+  /* ---- Spacing ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ---- Layout ---- */
+  --topbar-height: 52px;
+  --sidebar-width: 200px;
+  --sidebar-width-collapsed: 60px;
+
+  /* ---- Transitions ---- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Z-index Scale ---- */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-loading: 600;
+
+  /* ---- Glassmorphism ---- */
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(40px);
+}

@@ -1,0 +1,111 @@
+/* ============================================
+   CryptoTerminal — Micro-Animations
+   ============================================ */
+
+/* Pulse glow on accent elements */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 5px var(--neon-green-glow); }
+  50% { box-shadow: 0 0 20px var(--neon-green-glow-strong); }
+}
+.pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* Counter animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.count-up {
+  animation: countUp 0.5s ease forwards;
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.slide-in-right {
+  animation: slideInRight 0.4s ease forwards;
+}
+
+/* Scale in */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.scale-in {
+  animation: scaleIn 0.3s ease forwards;
+}
+
+/* Stagger children */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.30s; }
+.stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-children > *:nth-child(8) { animation-delay: 0.40s; }
+.stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
+.stagger-children > *:nth-child(10) { animation-delay: 0.50s; }
+
+/* Price flash */
+@keyframes flashGreen {
+  0% { background: transparent; }
+  30% { background: var(--gain-bg-strong); }
+  100% { background: transparent; }
+}
+@keyframes flashRed {
+  0% { background: transparent; }
+  30% { background: var(--loss-bg-strong); }
+  100% { background: transparent; }
+}
+.flash-green {
+  animation: flashGreen 1s ease;
+}
+.flash-red {
+  animation: flashRed 1s ease;
+}
+
+/* Rotate spin (for loading indicators) */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Hover lift */
+.hover-lift {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Glow border on focus */
+.glow-focus:focus-within {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 0 3px var(--neon-green-glow), var(--shadow-glow);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Number ticker transition */
+.number-tick {
+  transition: all 0.3s ease;
+  display: inline-block;
+}

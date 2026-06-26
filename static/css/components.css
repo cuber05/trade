@@ -1,0 +1,367 @@
+/* ============================================
+   CryptoTerminal — Reusable Components
+   ============================================ */
+
+/* ---- Metrics Strip ---- */
+.metrics-strip {
+  display: flex;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  overflow-x: auto;
+  padding-bottom: var(--sp-2);
+}
+.metric-card {
+  flex: 1;
+  min-width: 180px;
+  padding: var(--sp-4);
+  background: var(--bg-surface);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-fast);
+}
+.metric-card:hover {
+  border-color: var(--border-color-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.metric-card-label {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-1);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.metric-card-label i {
+  color: var(--neon-green);
+}
+.metric-card-value {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.metric-card-change {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  font-family: var(--font-mono);
+  margin-top: var(--sp-1);
+}
+
+/* ---- Coin Row (used in trending, gainers, losers) ---- */
+.coin-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.coin-row:hover {
+  background: var(--bg-tertiary);
+}
+.coin-row-rank {
+  width: 22px;
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  text-align: center;
+  flex-shrink: 0;
+}
+.coin-row-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.coin-row-info {
+  flex: 1;
+  min-width: 0;
+}
+.coin-row-name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.coin-row-symbol {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+.coin-row-price {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-align: right;
+  white-space: nowrap;
+}
+.coin-row-change {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  min-width: 65px;
+  text-align: right;
+}
+
+/* ---- Score Ring ---- */
+.score-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.score-ring svg {
+  transform: rotate(-90deg);
+}
+.score-ring-value {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+}
+
+/* ---- Sparkline ---- */
+.sparkline-container {
+  width: 120px;
+  height: 40px;
+}
+
+/* ---- Tag / Chip ---- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.tag i {
+  font-size: 10px;
+}
+.tag-accent {
+  background: var(--neon-green-glow);
+  border-color: var(--border-accent);
+  color: var(--neon-green);
+}
+
+/* ---- Category Tabs ---- */
+.category-tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius);
+  padding: 3px;
+}
+.category-tab {
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+.category-tab:hover {
+  color: var(--text-primary);
+}
+.category-tab.active {
+  background: var(--bg-elevated);
+  color: var(--neon-green);
+  font-weight: var(--fw-semibold);
+}
+
+/* ---- Form Controls ---- */
+.form-group {
+  margin-bottom: var(--sp-4);
+}
+.form-label {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-2);
+}
+.form-input {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-size: var(--fs-md);
+  transition: all var(--transition-fast);
+}
+.form-input:focus {
+  border-color: var(--border-accent);
+  box-shadow: 0 0 0 3px var(--neon-green-glow);
+}
+.form-input::placeholder {
+  color: var(--text-tertiary);
+}
+.form-select {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-size: var(--fs-md);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238892b0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+.form-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ---- Progress Bar ---- */
+.progress-bar {
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+/* ---- Stat Item ---- */
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.stat-item:last-child {
+  border-bottom: none;
+}
+.stat-label {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+.stat-value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* ---- Empty State ---- */
+.empty-state {
+  text-align: center;
+  padding: var(--sp-12) var(--sp-8);
+  color: var(--text-secondary);
+}
+.empty-state i {
+  font-size: var(--fs-4xl);
+  color: var(--text-tertiary);
+  margin-bottom: var(--sp-4);
+  display: block;
+}
+.empty-state h3 {
+  font-size: var(--fs-lg);
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+.empty-state p {
+  font-size: var(--fs-sm);
+  margin-bottom: var(--sp-6);
+}
+
+/* ---- Tooltip ---- */
+.tooltip {
+  position: relative;
+}
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: var(--fs-xs);
+  color: var(--text-primary);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  z-index: var(--z-dropdown);
+}
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+/* ---- News Item ---- */
+.news-item {
+  display: flex;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+.news-item:last-child {
+  border-bottom: none;
+}
+.news-item:hover {
+  opacity: 0.85;
+}
+.news-item-time {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  min-width: 50px;
+}
+.news-item-content {
+  flex: 1;
+}
+.news-item-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+.news-item-source {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}
+.news-item-sentiment {
+  font-size: var(--fs-xs);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: var(--fw-semibold);
+  align-self: flex-start;
+}
+.news-item-sentiment.bullish {
+  background: var(--gain-bg);
+  color: var(--gain);
+}
+.news-item-sentiment.bearish {
+  background: var(--loss-bg);
+  color: var(--loss);
+}
+.news-item-sentiment.neutral-sent {
+  background: rgba(136, 146, 176, 0.1);
+  color: var(--text-secondary);
+}

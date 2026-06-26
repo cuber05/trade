@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CryptoTerminal — AI-Powered Bloomberg for Crypto</title>
+  <meta name="description" content="Professional-grade cryptocurrency intelligence dashboard with AI analysis, real-time market data, portfolio tracking, and trading signals." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- TradingView Lightweight Charts -->
+  <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/components.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/coin-detail.css" />
+  <link rel="stylesheet" href="/css/portfolio.css" />
+  <link rel="stylesheet" href="/css/alerts.css" />
+  <link rel="stylesheet" href="/css/animations.css" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <i class="fas fa-terminal"></i>
+        <span>CryptoTerminal</span>
+      </div>
+      <div class="loading-bar">
+        <div class="loading-bar-fill"></div>
+      </div>
+      <p class="loading-text">Connecting to market feeds...</p>
+    </div>
+  </div>
+
+  <!-- App Shell -->
+  <div id="app" class="app" style="display:none;">
+    <!-- Top Bar -->
+    <header id="topbar" class="topbar">
+      <div class="topbar-left">
+        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo">
+          <i class="fas fa-terminal"></i>
+          <span class="logo-text">Crypto<strong>Terminal</strong></span>
+        </div>
+        <div class="topbar-ticker" id="topbar-ticker"></div>
+      </div>
+      <div class="topbar-center">
+        <div class="search-container" id="search-container">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="global-search" class="global-search" placeholder="Search any coin... (Ctrl+K)" autocomplete="off" />
+          <kbd class="search-shortcut">Ctrl+K</kbd>
+          <div class="search-dropdown" id="search-dropdown"></div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="market-status" id="market-status">
+          <span class="status-dot live"></span>
+          <span>LIVE</span>
+        </div>
+        <div class="topbar-metrics" id="topbar-metrics"></div>
+        <button id="btn-alerts-bell" class="topbar-btn" aria-label="Alerts">
+          <i class="fas fa-bell"></i>
+          <span class="alert-badge" id="alert-badge" style="display:none;">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <nav id="sidebar" class="sidebar">
+        <div class="sidebar-nav">
+          <button class="nav-item active" data-view="dashboard" id="nav-dashboard">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-item" data-view="markets" id="nav-markets">
+            <i class="fas fa-globe"></i>
+            <span>Markets</span>
+          </button>
+          <button class="nav-item" data-view="coin-detail" id="nav-coin-detail" style="display:none;">
+            <i class="fas fa-coins"></i>
+            <span>Coin Analysis</span>
+          </button>
+          <button class="nav-item" data-view="portfolio" id="nav-portfolio">
+            <i class="fas fa-wallet"></i>
+            <span>Portfolio</span>
+          </button>
+          <button class="nav-item" data-view="watchlist" id="nav-watchlist">
+            <i class="fas fa-star"></i>
+            <span>Watchlist</span>
+          </button>
+          <button class="nav-item" data-view="alerts" id="nav-alerts">
+            <i class="fas fa-bell"></i>
+            <span>Alerts</span>
+          </button>
+          <button class="nav-item" data-view="learn" id="nav-learn">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Learn</span>
+          </button>
+        </div>
+        <div class="sidebar-footer">
+          <div class="fear-greed-mini" id="fg-mini">
+            <div class="fg-mini-label">Fear & Greed</div>
+            <div class="fg-mini-value" id="fg-mini-value">--</div>
+            <div class="fg-mini-bar">
+              <div class="fg-mini-bar-fill" id="fg-mini-bar-fill"></div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Content Area -->
+      <main id="content" class="content">
+        <!-- Dashboard View -->
+        <section id="view-dashboard" class="view active">
+          <div class="metrics-strip" id="global-metrics-strip"></div>
+          <div class="dashboard-grid">
+            <div class="panel panel-fear-greed" id="panel-fear-greed">
+              <div class="panel-header">
+                <h3><i class="fas fa-heartbeat"></i> Fear & Greed Index</h3>
+              </div>
+              <div class="panel-body">
+                <div class="fg-gauge-container" id="fg-gauge-container">
+                  <canvas id="fg-gauge-canvas" width="220" height="140"></canvas>
+                  <div class="fg-value" id="fg-value">--</div>
+                  <div class="fg-label" id="fg-label">Loading...</div>
+                </div>
+                <div class="fg-history" id="fg-history"></div>
+              </div>
+            </div>
+            <div class="panel panel-trending" id="panel-trending">
+              <div class="panel-header">
+                <h3><i class="fas fa-fire"></i> Trending</h3>
+                <span class="panel-badge">24h</span>
+              </div>
+              <div class="panel-body">
+                <div class="trending-list" id="trending-list"></div>
+              </div>
+            </div>
+            <div class="panel panel-gainers" id="panel-gainers">
+              <div class="panel-header">
+                <h3><i class="fas fa-arrow-trend-up"></i> Top Gainers</h3>
+                <span class="panel-badge gain">24h</span>
+              </div>
+              <div class="panel-body">
+                <div class="movers-list" id="gainers-list"></div>
+              </div>
+            </div>
+            <div class="panel panel-losers" id="panel-losers">
+              <div class="panel-header">
+                <h3><i class="fas fa-arrow-trend-down"></i> Top Losers</h3>
+                <span class="panel-badge loss">24h</span>
+              </div>
+              <div class="panel-body">
+                <div class="movers-list" id="losers-list"></div>
+              </div>
+            </div>
+            <div class="panel panel-dominance" id="panel-dominance">
+              <div class="panel-header">
+                <h3><i class="fab fa-bitcoin"></i> Market Dominance</h3>
+              </div>
+              <div class="panel-body">
+                <canvas id="dominance-chart"></canvas>
+              </div>
+            </div>
+            <div class="panel panel-heatmap" id="panel-heatmap">
+              <div class="panel-header">
+                <h3><i class="fas fa-th"></i> Market Heatmap</h3>
+                <div class="panel-actions">
+                  <button class="panel-action-btn active" data-heatmap="price_change_percentage_24h_in_currency">24h</button>
+                  <button class="panel-action-btn" data-heatmap="price_change_percentage_7d_in_currency">7d</button>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="heatmap-grid" id="heatmap-grid"></div>
+              </div>
+            </div>
+            <div class="panel panel-market-chart" id="panel-market-chart">
+              <div class="panel-header">
+                <h3><i class="fas fa-chart-area"></i> Bitcoin Price</h3>
+                <div class="panel-actions">
+                  <button class="panel-action-btn" data-range="1">1D</button>
+                  <button class="panel-action-btn active" data-range="7">7D</button>
+                  <button class="panel-action-btn" data-range="30">30D</button>
+                  <button class="panel-action-btn" data-range="365">1Y</button>
+                </div>
+              </div>
+              <div class="panel-body chart-body">
+                <div id="market-cap-chart-container" class="tv-chart-container"></div>
+              </div>
+            </div>
+            <div class="panel panel-news" id="panel-news">
+              <div class="panel-header">
+                <h3><i class="fas fa-newspaper"></i> Latest News</h3>
+              </div>
+              <div class="panel-body">
+                <div class="news-feed" id="news-feed"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Markets View -->
+        <section id="view-markets" class="view">
+          <div class="view-header">
+            <h2>Markets</h2>
+            <div class="view-controls">
+              <div class="category-tabs" id="market-categories">
+                <button class="category-tab active" data-category="">All</button>
+                <button class="category-tab" data-category="decentralized-finance-defi">DeFi</button>
+                <button class="category-tab" data-category="meme-token">Meme</button>
+                <button class="category-tab" data-category="layer-1">Layer 1</button>
+                <button class="category-tab" data-category="layer-2">Layer 2</button>
+                <button class="category-tab" data-category="gaming">Gaming</button>
+              </div>
+            </div>
+          </div>
+          <div class="markets-table-container">
+            <table class="markets-table" id="markets-table">
+              <thead>
+                <tr>
+                  <th class="th-rank">#</th>
+                  <th class="th-name">Name</th>
+                  <th class="th-price">Price</th>
+                  <th class="th-change">1h %</th>
+                  <th class="th-change">24h %</th>
+                  <th class="th-change">7d %</th>
+                  <th class="th-mcap">Market Cap</th>
+                  <th class="th-volume">Volume (24h)</th>
+                  <th class="th-sparkline">Last 7 Days</th>
+                </tr>
+              </thead>
+              <tbody id="markets-tbody"></tbody>
+            </table>
+          </div>
+          <div class="markets-pagination" id="markets-pagination"></div>
+        </section>
+
+        <!-- Coin Detail View -->
+        <section id="view-coin-detail" class="view">
+          <div id="coin-detail-content"></div>
+        </section>
+
+        <!-- Portfolio View -->
+        <section id="view-portfolio" class="view">
+          <div class="view-header">
+            <h2><i class="fas fa-wallet"></i> Portfolio</h2>
+            <button class="btn btn-primary" id="btn-add-holding">
+              <i class="fas fa-plus"></i> Add Holding
+            </button>
+          </div>
+          <div class="portfolio-summary" id="portfolio-summary"></div>
+          <div class="portfolio-chart-container" id="portfolio-chart-container">
+            <canvas id="portfolio-allocation-chart"></canvas>
+          </div>
+          <div class="portfolio-holdings" id="portfolio-holdings"></div>
+        </section>
+
+        <!-- Watchlist View -->
+        <section id="view-watchlist" class="view">
+          <div class="view-header">
+            <h2><i class="fas fa-star"></i> Watchlist</h2>
+          </div>
+          <div class="watchlist-grid" id="watchlist-grid"></div>
+        </section>
+
+        <!-- Alerts View -->
+        <section id="view-alerts" class="view">
+          <div class="view-header">
+            <h2><i class="fas fa-bell"></i> Alerts</h2>
+            <button class="btn btn-primary" id="btn-create-alert">
+              <i class="fas fa-plus"></i> Create Alert
+            </button>
+          </div>
+          <div class="alerts-active" id="alerts-active"></div>
+          <div class="alerts-history-section" id="alerts-history-section">
+            <h3>Alert History</h3>
+            <div id="alerts-history-list"></div>
+          </div>
+        </section>
+
+        <!-- Learn View -->
+        <section id="view-learn" class="view">
+          <div class="view-header">
+            <h2><i class="fas fa-graduation-cap"></i> Crypto Academy</h2>
+          </div>
+          <div class="learn-grid" id="learn-grid"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal">
+      <div class="modal-header" id="modal-header">
+        <h3 id="modal-title"></h3>
+        <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="/js/utils.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/markets.js"></script>
+  <script src="/js/coin-detail.js"></script>
+  <script src="/js/portfolio.js"></script>
+  <script src="/js/watchlist.js"></script>
+  <script src="/js/alerts.js"></script>
+  <script src="/js/learn.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
